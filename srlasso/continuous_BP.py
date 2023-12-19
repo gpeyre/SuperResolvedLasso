@@ -1,19 +1,17 @@
 import numpy as np
-import lasso as ls
 from  numpy import dot as dot
+# import lasso as ls
 
-## Continuous Basis Pursuit
 def cBP_1D( A, dA, h, y_obs,alpha ):    
     """
-    This function solves the continuous basis pursuit problem, 
-    min_{a,b} || A@a + dA@b - y_obs ||^2 + alpha * | a|_1 s.t.  a_j >=0, |b_j| <= a_j*h/2
+    This function solves the continuous basis pursuit problem
+     
     
 
     Parameters:
-    ----------
+    ------------
     A : numpy.ndarray of size (m,n)
         the discretized forward operator, each column is phi(x_j) \in R^m. 
-        
     dA : numpy.ndarray of size (m,n)
         the discretized gradient of the forward operator, each column is phi'(x_j) \in R^m. 
     h : float.
@@ -22,15 +20,15 @@ def cBP_1D( A, dA, h, y_obs,alpha ):
         measurements
     alpha: float
             regularisation parameter.
-    
+
     Returns:
-    -------
+    ---------
     shift : numpy.ndarray of size (n,)
         recovered positions
     a : numpy.ndarray of size (n,)
         recovered amplitudes
     """
-    
+
     N = A.shape[1]
     A3 = np.block([A+h/2*dA, A-h/2*dA])
       
@@ -59,27 +57,21 @@ def cBP_1D( A, dA, h, y_obs,alpha ):
 def SRLasso(A, dA, y_obs,alpha,tau):
     """
     This function solves SR Lasso, 
-    min_{a,b} || A@a + \tau* dA_S@b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2) 
+        ``min_{a,b} || A@a + \tau* dA_S@b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)`` 
 
-    Parameters:
-    ----------
-    A : numpy.ndarray of size (m,n)
-        the discretized forward operator, each column is phi(x_j) \in R^m. 
-        
-    dA : numpy.ndarray of size (m,n)
-        the discretized gradient of the forward operator, each column is phi'(x_j) \in R^m. 
-    tau : float between 0 and 1
-        controls how far off the grid we can recover
-    y_obs : numpy.ndarray f size (m,)
+    :param A: numpy.ndarray of size (m,n)
+        the discretized forward operator, each column is phi(x_j) \in R^m.
+    :param dA: numpy.ndarray of size (m,n)
+        the discretized gradient of the forward operator, each column is phi'(x_j) \in R^m.
+    :param tau: float between 0 and 1
+        controls how far off the grid we can recover.
+    :param y_obs: numpy.ndarray f size (m,)
         measurements
-    alpha: float
-            regularisation parameter.
-    
-    Returns:
-    -------
-    shift : numpy.ndarray of size (n,)
+    :param alpha: float
+        regularisation parameter.
+    :return shift: numpy.ndarray of size (n,)
         recovered positions
-    a : numpy.ndarray of size (n,)
+    :return a: numpy.ndarray of size (n,)
         recovered amplitudes
     """
     scaleA = 1/np.sqrt(np.sum(np.abs(dA)**2,axis=0))
@@ -100,36 +92,28 @@ def SRLasso(A, dA, y_obs,alpha,tau):
 
 def SRLasso_2DTensor(A, dA, B, dB, y_obs,alpha,tau):
     """
-    This function solves SR Lasso, 
-    min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2) 
-    where the forward operator F acts as a tensor A\otimes B. 
-    
-    Parameters:
-    ----------
-    A : numpy.ndarrays of size (m1,n)
-        the discretized forward operator, each column is phi(x_j) \in R^m1. 
-    B : numpy.ndarrays of size (m2,n)
-        the discretized forward operator, each column is psi(x_k) \in R^m2. 
-    The forward operator is then A \otimes B, to model where we integrate against separable functions phi(x)*psi(y).
-        
-    dA : numpy.ndarray of size (m1,n)
-        the discretized gradient of the forward operator, each column is phi'(x_j) \in R^m1. 
-        
-    dA : numpy.ndarray of size (m2,n)
-        the discretized gradient of the forward operator, each column is psi'(x_j) \in R^m2. 
-        
-    tau : float between 0 and 1
+    This function solves SR Lasso,
+        ``min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)``
+        where the forward operator F acts as a tensor A\otimes B. 
+
+    :param A: numpy.ndarrays of size (m1,n)
+        the discretized forward operator, each column is phi(x_j) \in R^m1.
+    :param B: numpy.ndarrays of size (m2,n)
+        the discretized forward operator, each column is psi(x_k) \in R^m2.
+        The forward operator is then A \otimes B, to model where we integrate against separable functions phi(x)*psi(y).
+    :param dA: numpy.ndarray of size (m1,n)
+        the discretized gradient of the forward operator, each column is phi'(x_j) \in R^m1.
+    :param dA: numpy.ndarray of size (m2,n)
+        the discretized gradient of the forward operator, each column is psi'(x_j) \in R^m2.
+    :param tau: float between 0 and 1
         controls how far off the grid we can recover
-    y_obs : numpy.ndarray f size (m,)
+    :param y_obs: numpy.ndarray f size (m,)
         measurements
-    alpha: float
-            regularisation parameter.
-    
-    Returns:
-    -------
-    shift1, shift2 : numpy.ndarray of size (n,)
+    :param alpha: float
+        regularisation parameter.
+    :return: numpy.ndarray of size (n,)
         shifts for recovered in each dimension
-    a : numpy.ndarray of size (n,)
+    :return a: numpy.ndarray of size (n,)
         recovered amplitudes
     """
     tau1,tau2 = tau[0],tau[1]
@@ -188,18 +172,18 @@ def SRLasso_2DTensor(A, dA, B, dB, y_obs,alpha,tau):
 def SRLasso_3DTensor(X,Y,B,dX,dY,dB, y_obs,alpha,tau):
     """
     This function solves SR Lasso, 
-    min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2) 
-    where the forward operator F acts as a tensor X \otimes Y\otimes B 
+        ``min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)`` 
+        where the forward operator F acts as a tensor X \otimes Y\otimes B 
     
     Parameters:
-    ----------
+    --------------
     X : numpy.ndarrays of size (m1,n)
         the discretized forward operator, each column is phi(x_j) \in R^m1. 
     Y : numpy.ndarrays of size (m2,n)
         the discretized forward operator, each column is psi(x_k) \in R^m2. 
     B : numpy.ndarrays of size (m3,n)
         the discretized forward operator, each column is xi(x_k) \in R^m2. 
-    The forward operator is then X \otimes Y\otimes B, to model where we integrate against separable functions phi(x)*psi(y)*xi(z).
+        The forward operator is then X \otimes Y\otimes B, to model where we integrate against separable functions phi(x)*psi(y)*xi(z).
         
     dX,dY, dB : numpy.ndarray of size (m1,n), (m2,n), (m3,n)
         the discretized gradient of the forward operator, with columns  phi'(x_j),psi'(y_j),xi'(z_j) respectively. 
@@ -213,7 +197,7 @@ def SRLasso_3DTensor(X,Y,B,dX,dY,dB, y_obs,alpha,tau):
             regularisation parameter.
     
     Returns:
-    -------
+    -----------
     shift1, shift2, shift3 : numpy.ndarray of size (n,)
         shifts for recovered in each dimension
     a : numpy.ndarray of size (n,)

@@ -7,25 +7,18 @@ import numpy as np
 def Lasso_Tensor( X,Xt, y_obs,la ):
     """
     This function solves the group Lasso problem via VarPro, letting R be the group Lasso norm,
-    min_z || X(z) - y_obs ||^2 + lambda * R(z)
-    The minimization is over array of size (n1,...,nd,d) and R(z) = sum_j || z_{(:,:,...,:, j)} ||_F.
+        ``min_z || X(z) - y_obs ||^2 + lambda * R(z)``
+        The minimization is over array of size (n1,...,nd,d) and ``R(z) = sum_j || z_{(:,:,...,:, j)} ||_F``.
 
-    Parameters:
-    ----------
-    X :  the forward operator. This is a function handle mapping
+    :param X:  the forward operator. This is a function handle mapping
         numpy.ndarray of size (n1,...,nd,d) to numpy.ndarray of size (m1,...,md)
-    Xt : is a function handle. This is the adjoint to X.
-    la : float, regularisation parameter
-    y : numpy.ndarray f size (m1,... md)
-        measurements
-    
-    Returns:
-    -------
-    z : numpy.ndarray of size (n1,...,nd,d)
+    :param Xt: is a function handle. This is the adjoint to X.
+    :param la: float, regularisation parameter
+    :param y: numpy.ndarray f size (m1,... md), measurements
+    :return z: numpy.ndarray of size (n1,...,nd,d)
         solution to group lasso
     """
-      
-    
+
     shape0 = y_obs.shape
     m0 = np.prod(shape0)
     Shape1 =  Xt(y_obs).shape[:-1]
@@ -69,23 +62,19 @@ def Lasso_Tensor( X,Xt, y_obs,la ):
 def groupLasso(X, y_obs,la, q):
     """
     This function solves the group Lasso problem via VarPro, letting R be the group Lasso norm,
-    min_z || X@z - y_obs ||^2 + lambda * R(z)
-    The minimization is over array of size (n1,...,nd,d) and R(z) = sum_j || z_{(:,:,...,:, j)} ||_F.
-    Given a vector z, the group norm is R(z) = np.sum( (np.abs(z)).reshape(q,-1), axis=0 )
+        ``min_z || X@z - y_obs ||^2 + lambda * R(z)``
+        The minimization is over array of size (n1,...,nd,d) and R(z) = sum_j || z_{(:,:,...,:, j)} ||_F.
+        Given a vector z, the group norm is R(z) = np.sum( (np.abs(z)).reshape(q,-1), axis=0 )
 
-    Parameters:
-    ----------
-    X : numpy.ndarray of size (m,n*q)
+    :param X: numpy.ndarray of size (m,n*q)
         the forward operator. 
-    la : float, regularisation parameter
-    y_obs : numpy.ndarray of size (m,)
+    :param la: float, regularisation parameter
+    :param y_obs: numpy.ndarray of size (m,)
             measurements
-    q : int, 
+    :param q: int, 
         size of each group
     
-    Returns:
-    -------
-    z : numpy.ndarray of size (n*q,)
+    :return z: numpy.ndarray of size (n*q,)
         solution to group lasso
     """
     

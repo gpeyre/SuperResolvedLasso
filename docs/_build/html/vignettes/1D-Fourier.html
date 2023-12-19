@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1D Fourier example &mdash; SR-Lasso 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2D example" href="2D-comparison.html" />
+    <link rel="prev" title="SR-Lasso: Super-resolved Lasso" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SR-Lasso
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1D Fourier example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Run-Lasso-and-find-the-optimal-\lambda-parameter">Run Lasso and find the optimal <span class="math notranslate nohighlight">\(\lambda\)</span> parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#For-optimal-\lambda,-run-SR-Lasso-for-different-\tau-parameters">For optimal <span class="math notranslate nohighlight">\(\lambda\)</span>, run SR-Lasso for different <span class="math notranslate nohighlight">\(\tau\)</span> parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Record-the-Lasso-error-vs-SR-Lasso-error-and-support-size-as-a-function-of-\lambda.">Record the Lasso error vs SR-Lasso error and support size as a function of <span class="math notranslate nohighlight">\(\lambda\)</span>.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2D-comparison.html">2D example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="certificate.html">Display of certificates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../srlasso.html">srlasso package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SR-Lasso</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">1D Fourier example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/vignettes/1D-Fourier.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="1D-Fourier-example">
+<h1>1D Fourier example<a class="headerlink" href="#1D-Fourier-example" title="Link to this heading"></a></h1>
+<p><span class="math notranslate nohighlight">\(\phi(x) = (\exp(2\pi i k x))_{|k|\leq f_c}\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[133]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import packages.</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">mmd</span> <span class="k">as</span> <span class="nn">mmd</span>
+<span class="kn">import</span> <span class="nn">operators</span> <span class="k">as</span> <span class="nn">myops</span>
+<span class="kn">import</span> <span class="nn">lasso</span> <span class="k">as</span> <span class="nn">ls</span>
+<span class="kn">import</span> <span class="nn">continuous_BP</span> <span class="k">as</span> <span class="nn">cbp</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">helper</span> <span class="kn">import</span> <span class="n">prune</span>
+
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span>  <span class="c1"># Python 3.4+</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">myops</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">mmd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[133]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;module &#39;mmd&#39; from &#39;/Users/u2272691/Documents/GitHub/continuous-BP/Python/cBP_paper/mmd.py&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[134]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#helper funs</span>
+
+<span class="n">error_fun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">b</span> <span class="p">:</span> <span class="n">mmd</span><span class="o">.</span><span class="n">mmd_laplace</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span><span class="n">b</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<p>Get the discretized Fourier operator A and discretized gradient dA.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[135]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">=</span> <span class="mi">20</span>
+<span class="n">xgrid</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="c1">#define Fourier</span>
+<span class="n">fq</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Phi</span><span class="p">,</span>  <span class="n">dPhi</span> <span class="o">=</span> <span class="n">myops</span><span class="o">.</span><span class="n">getFourierOp</span><span class="p">(</span><span class="n">fq</span><span class="p">)</span>
+<span class="n">A</span><span class="p">,</span> <span class="n">dA</span> <span class="o">=</span> <span class="n">Phi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span> <span class="n">dPhi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+<span class="n">scaleA</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dA</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<p>Define the Lasso and SR Lasso solvers with support pruning</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[136]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">Grid_Lasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="c1"># Call Lasso</span>
+    <span class="n">al_val</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">groupLasso</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#prune out small spikes</span>
+    <span class="n">al_val</span><span class="p">,</span> <span class="n">grid_lasso</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">al_val</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">al_val</span><span class="p">,</span> <span class="n">grid_lasso</span>
+
+<span class="k">def</span> <span class="nf">SRLasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">shift</span> <span class="o">=</span> <span class="n">cbp</span><span class="o">.</span><span class="n">SRLasso</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tau</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">xgrid</span> <span class="o">+</span><span class="n">shift</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">grid</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<p>Define ground truth and observations</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[177]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#define ground truth</span>
+<span class="n">h1</span> <span class="o">=</span> <span class="n">xgrid</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#grid-size</span>
+<span class="n">spacing</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="c1">#float between 0 and 1. how much to move inside grid.</span>
+
+<span class="n">results_dir</span> <span class="o">=</span>  <span class="s1">&#39;results/</span><span class="si">{fc}</span><span class="s1">_</span><span class="si">{nx}</span><span class="s1">_</span><span class="si">{spacing}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="n">fq</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="n">nx</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">spacing</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+<span class="o">!</span>mkdir<span class="w"> </span><span class="nv">$results_dir</span>
+
+<span class="c1">#true positions</span>
+<span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h1</span><span class="p">,</span><span class="o">-</span><span class="n">h1</span><span class="p">])</span><span class="o">*</span><span class="n">spacing</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="n">xgrid</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="mf">.25</span><span class="p">)],</span> <span class="n">xgrid</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="mf">.65</span><span class="p">)]])</span><span class="o">+</span><span class="n">shift</span>
+
+<span class="c1">#true amplitudes</span>
+<span class="n">a_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="p">])</span>
+
+<span class="c1">#observations</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">Phi</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span><span class="nd">@a_true</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+mkdir: results/4_20_30: File exists
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[178]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#test reconstruction</span>
+
+<span class="n">noise_lev</span> <span class="o">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_true</span><span class="p">))</span>
+<span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span><span class="n">noise_lev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span> <span class="o">*</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y_true</span><span class="o">-</span><span class="n">y_obs</span><span class="p">))</span>
+
+<span class="n">la</span><span class="o">=</span> <span class="mf">1e-1</span>
+<span class="n">tau</span><span class="o">=</span> <span class="mi">1</span>
+<span class="n">a</span><span class="p">,</span><span class="n">grid</span> <span class="o">=</span> <span class="n">SRLasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+<span class="n">a_lasso</span><span class="p">,</span> <span class="n">grid_lasso</span> <span class="o">=</span> <span class="n">Grid_Lasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+
+
+<span class="c1">#display</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">xgrid</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1">#grid points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SR-Lasso&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">a_true</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ground truth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">grid_lasso</span><span class="p">)</span><span class="o">%</span><span class="k">1</span>, np.real(a_lasso), &#39;g&#39;, label=&#39;lasso&#39;)
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;error:&#39;</span><span class="p">,</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span> <span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;error:&#39;</span><span class="p">,</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">grid_lasso</span><span class="p">,</span><span class="n">a_lasso</span><span class="p">,</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span> <span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.20978530551797173
+error: 0.08460003443560382
+error: 0.24371502327723513
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_9_1.png" src="../_images/vignettes_1D-Fourier_9_1.png" />
+</div>
+</div>
+<section id="Run-Lasso-and-find-the-optimal-\lambda-parameter">
+<h2>Run Lasso and find the optimal <span class="math notranslate nohighlight">\(\lambda\)</span> parameter<a class="headerlink" href="#Run-Lasso-and-find-the-optimal-\lambda-parameter" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[179]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="c1">#lambda range to test on</span>
+<span class="n">L</span><span class="o">=</span><span class="mi">20</span>
+<span class="n">la_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="nd">@y_true</span><span class="p">))</span>
+<span class="n">la_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">la_max</span><span class="o">/</span><span class="mi">3</span><span class="p">),</span><span class="n">L</span><span class="p">)</span>
+
+<span class="n">Runs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">Res_Lasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Runs</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">noise_lev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span> <span class="o">*</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+        <span class="n">la</span> <span class="o">=</span> <span class="n">la_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">al_val</span><span class="p">,</span><span class="n">grid_lasso</span> <span class="o">=</span> <span class="n">Grid_Lasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="mf">1e-4</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span><span class="p">,</span> <span class="n">grid_lasso</span><span class="p">,</span> <span class="n">al_val</span><span class="p">)</span>
+        <span class="n">Res_Lasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="c1">#save and display</span>
+<span class="n">mean_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Res_Lasso</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">std_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Res_Lasso</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lower_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+<span class="n">upper_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">mean_curve</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$\lambda$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">results_dir</span><span class="o">+</span><span class="s1">&#39;/lambda_Lasso.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">#retrive lambda giving the smallest error</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mean_curve</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_curve</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">la</span> <span class="o">=</span><span class="n">la_vals</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimal lambda:&#39;</span> <span class="p">,</span> <span class="n">la</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Res_Lasso_ave</span><span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_11_0.png" src="../_images/vignettes_1D-Fourier_11_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+optimal lambda: 0.21895308552693094 error 0.22529646190977268
+</pre></div></div>
+</div>
+</section>
+<section id="For-optimal-\lambda,-run-SR-Lasso-for-different-\tau-parameters">
+<h2>For optimal <span class="math notranslate nohighlight">\(\lambda\)</span>, run SR-Lasso for different <span class="math notranslate nohighlight">\(\tau\)</span> parameters<a class="headerlink" href="#For-optimal-\lambda,-run-SR-Lasso-for-different-\tau-parameters" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[184]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#experiment 1: changing noise and tau. Fixed lambda</span>
+<span class="n">K1</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">tau_vals1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">K1</span><span class="p">)</span>
+<span class="n">la</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="n">Runs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">Res_SRLasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">K1</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Runs</span><span class="p">):</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">noise_lev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K1</span><span class="p">):</span>
+        <span class="n">a</span><span class="p">,</span><span class="n">grid</span> <span class="o">=</span> <span class="n">SRLasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tau_vals1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">Res_SRLasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span><span class="o">=</span><span class="n">err</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[185]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="c1">#save and display</span>
+<span class="n">mean_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Res_SRLasso</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">std_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Res_SRLasso</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lower_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+<span class="n">upper_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_vals1</span><span class="p">,</span> <span class="n">mean_curve</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tau_vals1</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$ \tau $&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="c1">#plt.ylabel(&#39;Error&#39;, fontsize=16)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">results_dir</span><span class="o">+</span><span class="s1">&#39;/tau_SRLasso.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1">#retrieve optimal tau</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mean_curve</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_curve</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">tau1</span> <span class="o">=</span> <span class="n">tau_vals1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimal params:&#39;</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Res_SRLasso_ave</span><span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+optimal params: 0.8888888888888888 error 0.12637791774450577
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_14_1.png" src="../_images/vignettes_1D-Fourier_14_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[175]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1">#rerun both with same noise instance</span>
+
+<span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">noise_lev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span> <span class="o">*</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">a</span><span class="p">,</span><span class="n">grid</span> <span class="o">=</span> <span class="n">SRLasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">tau1</span><span class="p">,</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SR Lasso flatnorm&#39;</span><span class="p">,</span><span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span><span class="n">a_true</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span><span class="n">a</span><span class="p">))</span>
+
+<span class="n">al_val</span><span class="p">,</span><span class="n">grid_lasso</span><span class="o">=</span> <span class="n">Grid_Lasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lasso flatnorm&#39;</span><span class="p">,</span><span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span><span class="p">,</span> <span class="n">grid_lasso</span><span class="p">,</span><span class="n">al_val</span><span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SR Lasso flatnorm 0.16610887122303256
+Lasso flatnorm 0.2835021913722465
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[176]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">S</span><span class="p">(</span><span class="n">a_true</span><span class="p">),</span><span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span>
+                                           <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ks&#39;</span><span class="p">,</span><span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Ground truth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span>  <span class="n">markersize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+
+<span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">grid_lasso</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="n">al_val</span><span class="p">),</span><span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span>
+                                           <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span><span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lasso&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span>  <span class="n">markersize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span> <span class="o">=</span>  <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span>
+                                            <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;bd&#39;</span><span class="p">,</span><span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;SRLasso&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span> <span class="mi">0</span><span class="o">*</span><span class="n">xgrid</span><span class="p">,</span><span class="s1">&#39;kx&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span>  <span class="n">markersize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;16&quot;</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$\Omega$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;16&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">results_dir</span><span class="o">+</span><span class="s1">&#39;/comparison.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_16_0.png" src="../_images/vignettes_1D-Fourier_16_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[115]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;$</span><span class="si">{nx}</span><span class="s1">$&amp;$</span><span class="si">{spacing:.2f}</span><span class="s1">$&amp;$</span><span class="si">{tau1:.2f}</span><span class="s1">$&amp;$</span><span class="si">{lambd:.3f}</span><span class="s1">$&amp;$</span><span class="si">{Res_Lasso_ave:.3f}</span><span class="s1">$&amp;$</span><span class="si">{Res_SRLasso_ave:.3f}</span><span class="s1">$</span><span class="se">\\\\</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">nx</span><span class="o">=</span><span class="n">nx</span><span class="p">,</span><span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span><span class="n">tau1</span><span class="o">=</span><span class="n">tau1</span><span class="p">,</span><span class="n">lambd</span><span class="o">=</span><span class="n">la</span><span class="p">,</span><span class="n">Res_Lasso_ave</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Res_Lasso_ave</span><span class="p">),</span> <span class="n">Res_SRLasso_ave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Res_SRLasso_ave</span><span class="p">)</span> <span class="p">)</span>
+
+
+
+<span class="n">outputfile</span> <span class="o">=</span> <span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fq</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;output.txt&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+$20$&amp;$0.20$&amp;$0.67$&amp;$0.224$&amp;$0.225$&amp;$0.132$\\
+</pre></div></div>
+</div>
+</section>
+<section id="Record-the-Lasso-error-vs-SR-Lasso-error-and-support-size-as-a-function-of-\lambda.">
+<h2>Record the Lasso error vs SR-Lasso error and support size as a function of <span class="math notranslate nohighlight">\(\lambda\)</span>.<a class="headerlink" href="#Record-the-Lasso-error-vs-SR-Lasso-error-and-support-size-as-a-function-of-\lambda." title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[129]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="c1">#lambda range to test on</span>
+<span class="n">L</span><span class="o">=</span><span class="mi">20</span>
+<span class="n">la_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="nd">@y_true</span><span class="p">))</span>
+<span class="n">la_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">la_max</span><span class="o">/</span><span class="mi">3</span><span class="p">),</span><span class="n">L</span><span class="p">)</span>
+
+<span class="n">Runs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">Res_Lasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+<span class="n">Res_SRLasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+<span class="n">Supp_Lasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+<span class="n">Supp_SRLasso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">Runs</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Runs</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">noise_lev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span> <span class="o">*</span><span class="n">y_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+        <span class="n">la</span> <span class="o">=</span> <span class="n">la_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">al_val</span><span class="p">,</span><span class="n">grid_lasso</span> <span class="o">=</span> <span class="n">Grid_Lasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="mf">1e-2</span><span class="p">)</span>
+        <span class="n">Res_Lasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span><span class="p">,</span> <span class="n">grid_lasso</span><span class="p">,</span> <span class="n">al_val</span><span class="p">)</span>
+        <span class="n">Supp_Lasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">al_val</span><span class="p">)</span>
+
+        <span class="n">a</span><span class="p">,</span><span class="n">grid</span> <span class="o">=</span> <span class="n">SRLasso</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1e-2</span><span class="p">)</span>
+        <span class="n">Res_SRLasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">error_fun</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">a_true</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">Supp_SRLasso</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[132]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><br/><span></span><span class="n">plots</span> <span class="o">=</span> <span class="p">[</span><span class="n">Res_Lasso</span><span class="p">,</span> <span class="n">Res_SRLasso</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;SR Lasso&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">plots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">mean_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">mean_curve</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plots</span> <span class="o">=</span> <span class="p">[</span><span class="n">Supp_Lasso</span><span class="p">,</span> <span class="n">Supp_SRLasso</span><span class="p">]</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;SR Lasso&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">plots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">mean_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">mean_curve</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">std_curve</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">mean_curve</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">la_vals</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_20_0.png" src="../_images/vignettes_1D-Fourier_20_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_1D-Fourier_20_1.png" src="../_images/vignettes_1D-Fourier_20_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="SR-Lasso: Super-resolved Lasso" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="2D-comparison.html" class="btn btn-neutral float-right" title="2D example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clarice Poon and Gabriel Peyré.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

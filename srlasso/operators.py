@@ -6,22 +6,17 @@ import numpy as np
 def getFourierMatrices(K,xgrid):
     """
     This function returns matrices to model the Fourier sampling operator, 
-    phi(x) = 1/(2*K+1) (exp(2*pi*k*x))_{|k|\leq K}
-
-    Parameters:
-    ----------
-    K :  int
+        ``phi(x) = 1/(2*K+1) (exp(2*pi*k*x))_{|k|\leq K}``
+        
+    :param K:  int
         maximum observed frequency
-    xgrid : numpy.ndarray of size (n,)
+    :param xgrid: numpy.ndarray of size (n,)
             points to evaluate on, {x1,..., x_n}
-    
-    Returns:
-    -------
-    A : numpy.ndarray of size (2*K+1,n)
+    :return A: numpy.ndarray of size (2*K+1,n)
         Discretized operator on xgrid. A@v = \sum_{j=1}^n phi(x_j)
-    dA: numpy.ndarray of size (2*K+1,n)
+    :return dA: numpy.ndarray of size (2*K+1,n)
         Discretized gradient operator on xgrid. dA@v = \sum_{j=1}^n phi'(x_j)
-    Phi: normalized operator taking float to numpy.ndarray of size (2*K+1,)
+    :return Phi: normalized operator taking float to numpy.ndarray of size (2*K+1,)
     """
         
     fq = np.arange(-K,K)
@@ -94,17 +89,12 @@ def getGaussianMatrices(tvec,sigma,xgrid):
 def getFourierOp(K):
     """
     This function returns matrices to model the Fourier sampling operator, 
-    phi(x) = 1/(2*K+1) (exp(2*pi*k*x))_{|k|\leq K}
+        ``phi(x) = 1/(2*K+1) (exp(2*pi*k*x))_{|k|\leq K}``
 
-    Parameters:
-    ----------
-    K :  int
+    :param K:  int
         maximum observed frequency
-    
-    Returns:
-    -------
-    Phi: normalized operator taking float to numpy.ndarray of size (2*K+1,)
-    dPhi: gradient of Phi, taking float to numpy.ndarray of size (2*K+1,)
+    :return Phi: normalized operator taking float to numpy.ndarray of size (2*K+1,)
+    :return dPhi: gradient of Phi, taking float to numpy.ndarray of size (2*K+1,)
     """
         
     fq = np.arange(-K,K)

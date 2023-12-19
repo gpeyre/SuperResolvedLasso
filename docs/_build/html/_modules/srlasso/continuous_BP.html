@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>srlasso.continuous_BP &mdash; SRLasso 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SRLasso
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../vignettes/1D-Fourier.html">1D Fourier example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vignettes/2D-comparison.html">2D example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vignettes/certificate.html">Display of certificates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../srlasso.html">srlasso package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">srlasso</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SRLasso</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">srlasso.continuous_BP</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for srlasso.continuous_BP</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span>  <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span> <span class="k">as</span> <span class="n">dot</span>
+<span class="c1"># import lasso as ls</span>
+
+<div class="viewcode-block" id="cBP_1D">
+<a class="viewcode-back" href="../../srlasso.html#srlasso.continuous_BP.cBP_1D">[docs]</a>
+<span class="k">def</span> <span class="nf">cBP_1D</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span> <span class="p">):</span>    
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function solves the continuous basis pursuit problem</span>
+<span class="sd">     </span>
+<span class="sd">    </span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ------------</span>
+<span class="sd">    A : numpy.ndarray of size (m,n)</span>
+<span class="sd">        the discretized forward operator, each column is phi(x_j) \in R^m. </span>
+<span class="sd">    dA : numpy.ndarray of size (m,n)</span>
+<span class="sd">        the discretized gradient of the forward operator, each column is phi&#39;(x_j) \in R^m. </span>
+<span class="sd">    h : float.</span>
+<span class="sd">        grid size, we assume that x_{j+1} - x_j = h for all j.</span>
+<span class="sd">    y : numpy.ndarray f size (m,)</span>
+<span class="sd">        measurements</span>
+<span class="sd">    alpha: float</span>
+<span class="sd">            regularisation parameter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    ---------</span>
+<span class="sd">    shift : numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered positions</span>
+<span class="sd">    a : numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered amplitudes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">A3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([</span><span class="n">A</span><span class="o">+</span><span class="n">h</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">dA</span><span class="p">,</span> <span class="n">A</span><span class="o">-</span><span class="n">h</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">dA</span><span class="p">])</span>
+      
+
+    <span class="c1">#Run Fista</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A3</span><span class="o">.</span><span class="n">T</span><span class="nd">@A3</span><span class="p">)</span>
+    <span class="n">proxF</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">gamma</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="n">dG</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">A3</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">@</span><span class="p">(</span><span class="n">A3</span><span class="nd">@x</span> <span class="o">-</span> <span class="n">y_obs</span><span class="p">)</span>
+    <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,)</span>
+
+    <span class="n">x_cbp</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">FISTA</span><span class="p">(</span><span class="n">proxF</span><span class="p">,</span> <span class="n">dG</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">xinit</span><span class="p">)</span>
+    
+    <span class="c1">#recover solution</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">x_cbp</span><span class="p">[:</span><span class="n">N</span><span class="p">];</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">x_cbp</span><span class="p">[</span><span class="n">N</span><span class="p">:];</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">l</span><span class="o">+</span><span class="n">r</span> <span class="c1">#amplitudes</span>
+    
+
+    <span class="c1">#recover positions</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="n">a</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">shift</span></div>
+
+
+
+
+<div class="viewcode-block" id="SRLasso">
+<a class="viewcode-back" href="../../srlasso.html#srlasso.continuous_BP.SRLasso">[docs]</a>
+<span class="k">def</span> <span class="nf">SRLasso</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function solves SR Lasso, </span>
+<span class="sd">        ``min_{a,b} || A@a + \tau* dA_S@b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)`` </span>
+
+<span class="sd">    :param A: numpy.ndarray of size (m,n)</span>
+<span class="sd">        the discretized forward operator, each column is phi(x_j) \in R^m.</span>
+<span class="sd">    :param dA: numpy.ndarray of size (m,n)</span>
+<span class="sd">        the discretized gradient of the forward operator, each column is phi&#39;(x_j) \in R^m.</span>
+<span class="sd">    :param tau: float between 0 and 1</span>
+<span class="sd">        controls how far off the grid we can recover.</span>
+<span class="sd">    :param y_obs: numpy.ndarray f size (m,)</span>
+<span class="sd">        measurements</span>
+<span class="sd">    :param alpha: float</span>
+<span class="sd">        regularisation parameter.</span>
+<span class="sd">    :return shift: numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered positions</span>
+<span class="sd">    :return a: numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered amplitudes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scaleA</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dA</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">tau</span><span class="o">*</span><span class="n">dA</span><span class="o">*</span><span class="n">scaleA</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1">#Call group Lasso</span>
+    <span class="n">ab</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">groupLasso</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1">#retrieve the amplitudes</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">ab</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span>
+    
+    <span class="c1">#retrieve the off-the-grid shift, also pruning out small spikes</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">scaleA</span><span class="o">*</span><span class="n">ab</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">tau</span><span class="o">*</span><span class="n">b</span><span class="o">/</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">shift</span></div>
+
+
+
+
+<div class="viewcode-block" id="SRLasso_2DTensor">
+<a class="viewcode-back" href="../../srlasso.html#srlasso.continuous_BP.SRLasso_2DTensor">[docs]</a>
+<span class="k">def</span> <span class="nf">SRLasso_2DTensor</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dB</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function solves SR Lasso,</span>
+<span class="sd">        ``min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)``</span>
+<span class="sd">        where the forward operator F acts as a tensor A\otimes B. </span>
+
+<span class="sd">    :param A: numpy.ndarrays of size (m1,n)</span>
+<span class="sd">        the discretized forward operator, each column is phi(x_j) \in R^m1.</span>
+<span class="sd">    :param B: numpy.ndarrays of size (m2,n)</span>
+<span class="sd">        the discretized forward operator, each column is psi(x_k) \in R^m2.</span>
+<span class="sd">        The forward operator is then A \otimes B, to model where we integrate against separable functions phi(x)*psi(y).</span>
+<span class="sd">    :param dA: numpy.ndarray of size (m1,n)</span>
+<span class="sd">        the discretized gradient of the forward operator, each column is phi&#39;(x_j) \in R^m1.</span>
+<span class="sd">    :param dA: numpy.ndarray of size (m2,n)</span>
+<span class="sd">        the discretized gradient of the forward operator, each column is psi&#39;(x_j) \in R^m2.</span>
+<span class="sd">    :param tau: float between 0 and 1</span>
+<span class="sd">        controls how far off the grid we can recover</span>
+<span class="sd">    :param y_obs: numpy.ndarray f size (m,)</span>
+<span class="sd">        measurements</span>
+<span class="sd">    :param alpha: float</span>
+<span class="sd">        regularisation parameter.</span>
+<span class="sd">    :return: numpy.ndarray of size (n,)</span>
+<span class="sd">        shifts for recovered in each dimension</span>
+<span class="sd">    :return a: numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered amplitudes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tau1</span><span class="p">,</span><span class="n">tau2</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1">#normalization vectors</span>
+    <span class="n">scaleA</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dA</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">scaleB</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dB</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+
+    <span class="c1">#define the forward and adjoint operators</span>
+    <span class="k">def</span> <span class="nf">Op</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">dA</span><span class="p">,</span><span class="n">dB</span><span class="p">,</span><span class="n">tau1</span><span class="p">,</span><span class="n">tau2</span><span class="p">):</span>
+        <span class="n">Bt</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span> 
+        <span class="n">dBt</span> <span class="o">=</span> <span class="n">dB</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dAct</span> <span class="o">=</span> <span class="n">dA</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Bc</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+        <span class="n">dBc</span> <span class="o">=</span> <span class="n">dB</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+        <span class="n">Act</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="k">def</span> <span class="nf">FWD</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">z</span> <span class="o">=</span>   <span class="p">(</span><span class="n">A</span><span class="nd">@x0</span><span class="p">)</span><span class="nd">@Bt</span> <span class="o">+</span> <span class="n">tau1</span><span class="o">*</span> <span class="p">(</span><span class="n">dA</span><span class="nd">@x1</span><span class="p">)</span><span class="nd">@Bt</span> <span class="o">+</span> <span class="n">tau2</span><span class="o">*</span> <span class="p">(</span><span class="n">A</span><span class="nd">@x2</span><span class="p">)</span><span class="nd">@dBt</span>   
+            <span class="k">return</span> <span class="n">z</span>
+
+        <span class="k">def</span> <span class="nf">ADJ</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+
+            <span class="n">z0</span> <span class="o">=</span> <span class="p">(</span><span class="n">Act</span><span class="nd">@x</span><span class="p">)</span><span class="nd">@Bc</span>
+            <span class="n">z1</span> <span class="o">=</span> <span class="n">tau1</span><span class="o">*</span><span class="p">(</span><span class="n">dAct</span><span class="nd">@x</span><span class="p">)</span><span class="nd">@Bc</span>
+            <span class="n">z2</span> <span class="o">=</span> <span class="n">tau2</span><span class="o">*</span><span class="p">(</span><span class="n">Act</span><span class="nd">@x</span><span class="p">)</span><span class="nd">@dBc</span>
+
+            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z0</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">z</span>
+
+        <span class="k">return</span> <span class="n">FWD</span><span class="p">,</span> <span class="n">ADJ</span>
+
+    <span class="n">FWD</span><span class="p">,</span> <span class="n">ADJ</span> <span class="o">=</span> <span class="n">Op</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">dA</span><span class="o">*</span><span class="n">scaleA</span><span class="p">[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">dB</span><span class="o">*</span><span class="n">scaleB</span><span class="p">[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">tau1</span><span class="p">,</span><span class="n">tau2</span><span class="p">)</span>
+
+    <span class="c1">#define SR Lasso</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">Lasso_Tensor</span><span class="p">(</span><span class="n">FWD</span><span class="p">,</span><span class="n">ADJ</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
+
+        
+
+    <span class="c1">#recover amplitudes</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1">#off-the-grid shift</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleA</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">scaleB</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">shift1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">tau1</span><span class="o">*</span><span class="n">b1</span><span class="o">/</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">shift2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">tau2</span><span class="o">*</span><span class="n">b2</span><span class="o">/</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">shift1</span><span class="p">,</span> <span class="n">shift2</span></div>
+
+
+
+
+<div class="viewcode-block" id="SRLasso_3DTensor">
+<a class="viewcode-back" href="../../srlasso.html#srlasso.continuous_BP.SRLasso_3DTensor">[docs]</a>
+<span class="k">def</span> <span class="nf">SRLasso_3DTensor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">dX</span><span class="p">,</span><span class="n">dY</span><span class="p">,</span><span class="n">dB</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function solves SR Lasso, </span>
+<span class="sd">        ``min_{a,b} || F * a + \tau* dF_S * b - y_obs ||^2 + alpha * \sum_i \sqrt(|a_i|^2 +|b_i|^2)`` </span>
+<span class="sd">        where the forward operator F acts as a tensor X \otimes Y\otimes B </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    --------------</span>
+<span class="sd">    X : numpy.ndarrays of size (m1,n)</span>
+<span class="sd">        the discretized forward operator, each column is phi(x_j) \in R^m1. </span>
+<span class="sd">    Y : numpy.ndarrays of size (m2,n)</span>
+<span class="sd">        the discretized forward operator, each column is psi(x_k) \in R^m2. </span>
+<span class="sd">    B : numpy.ndarrays of size (m3,n)</span>
+<span class="sd">        the discretized forward operator, each column is xi(x_k) \in R^m2. </span>
+<span class="sd">        The forward operator is then X \otimes Y\otimes B, to model where we integrate against separable functions phi(x)*psi(y)*xi(z).</span>
+<span class="sd">        </span>
+<span class="sd">    dX,dY, dB : numpy.ndarray of size (m1,n), (m2,n), (m3,n)</span>
+<span class="sd">        the discretized gradient of the forward operator, with columns  phi&#39;(x_j),psi&#39;(y_j),xi&#39;(z_j) respectively. </span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    tau : float between 0 and 1</span>
+<span class="sd">        controls how far off the grid we can recover</span>
+<span class="sd">    y_obs : numpy.ndarray f size (m,)</span>
+<span class="sd">        measurements</span>
+<span class="sd">    alpha: float</span>
+<span class="sd">            regularisation parameter.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    shift1, shift2, shift3 : numpy.ndarray of size (n,)</span>
+<span class="sd">        shifts for recovered in each dimension</span>
+<span class="sd">    a : numpy.ndarray of size (n,)</span>
+<span class="sd">        recovered amplitudes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+
+    <span class="c1">#normalization vectors</span>
+    <span class="n">scaleX</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dX</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">scaleY</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dY</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">scaleB</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dB</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+
+
+    <span class="c1">#forward and adjoint operator</span>
+    <span class="k">def</span> <span class="nf">Op</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">dX</span><span class="p">,</span><span class="n">dY</span><span class="p">,</span><span class="n">dB</span><span class="p">,</span><span class="n">tau</span><span class="p">):</span>
+
+        <span class="c1">#faster to precompute the transpose matrices</span>
+        <span class="n">Bt</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dBt</span> <span class="o">=</span> <span class="n">dB</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Xt</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Yt</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dXt</span> <span class="o">=</span> <span class="n">dX</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dYt</span> <span class="o">=</span> <span class="n">dY</span><span class="o">.</span><span class="n">T</span>
+
+
+        <span class="k">def</span> <span class="nf">FWD</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">x</span><span class="p">[:,:,:,</span><span class="mi">0</span><span class="p">])),</span> <span class="n">Bt</span><span class="p">)</span> <span class="o">+</span> <span class="n">tau</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">dX</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">x</span><span class="p">[:,:,:,</span><span class="mi">1</span><span class="p">])),</span> <span class="n">Bt</span><span class="p">)</span> \
+                <span class="o">+</span><span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">dY</span><span class="p">,</span><span class="n">x</span><span class="p">[:,:,:,</span><span class="mi">2</span><span class="p">])),</span> <span class="n">Bt</span><span class="p">)</span> <span class="o">+</span> <span class="n">tau</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">x</span><span class="p">[:,:,:,</span><span class="mi">3</span><span class="p">])),</span> <span class="n">dBt</span><span class="p">)</span>
+
+
+        <span class="k">def</span> <span class="nf">ADJ</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">XYx</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Xt</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">Yt</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+            <span class="n">xB</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+
+            <span class="n">z0</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">XYx</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+            <span class="n">z1</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">dXt</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">Yt</span><span class="p">,</span><span class="n">xB</span><span class="p">))</span>
+            <span class="n">z2</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">Xt</span><span class="p">,</span><span class="n">dot</span><span class="p">(</span><span class="n">dYt</span><span class="p">,</span><span class="n">xB</span><span class="p">))</span>
+            <span class="n">z3</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">XYx</span><span class="p">,</span><span class="n">dB</span><span class="p">)</span>
+
+            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z0</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">z3</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">z</span>
+
+        <span class="k">return</span> <span class="n">FWD</span><span class="p">,</span> <span class="n">ADJ</span>
+
+    <span class="n">FWD</span><span class="p">,</span> <span class="n">ADJ</span> <span class="o">=</span> <span class="n">Op</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">dX</span><span class="o">*</span><span class="n">scaleX</span><span class="p">[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">dY</span><span class="o">*</span><span class="n">scaleY</span><span class="p">[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">dB</span><span class="o">*</span><span class="n">scaleB</span><span class="p">[</span><span class="kc">None</span><span class="p">,:],</span> <span class="n">tau</span><span class="p">)</span>
+
+
+
+    <span class="c1">#define SR Lasso solver    </span>
+    <span class="c1">#run group Lasso</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">Lasso_Tensor</span><span class="p">(</span><span class="n">FWD</span><span class="p">,</span><span class="n">ADJ</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="c1">#retrieve amplitude</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1">#retrieve positions (also prune)</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleX</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleY</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleB</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+     
+
+    <span class="n">shift1</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b1</span><span class="o">/</span><span class="n">a</span>
+    <span class="n">shift2</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b2</span><span class="o">/</span><span class="n">a</span>
+    <span class="n">shift3</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b3</span><span class="o">/</span><span class="n">a</span>
+
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">shift1</span><span class="p">,</span><span class="n">shift2</span><span class="p">,</span><span class="n">shift3</span></div>
+
+    
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clarice Poon and Gabriel Peyré.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

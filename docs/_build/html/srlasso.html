@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>srlasso package &mdash; SR-Lasso 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Display of certificates" href="vignettes/certificate.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SR-Lasso
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vignettes/1D-Fourier.html">1D Fourier example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vignettes/2D-comparison.html">2D example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vignettes/certificate.html">Display of certificates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">srlasso package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso.continuous_BP">srlasso.continuous_BP module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.continuous_BP.SRLasso"><code class="docutils literal notranslate"><span class="pre">SRLasso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.continuous_BP.SRLasso_2DTensor"><code class="docutils literal notranslate"><span class="pre">SRLasso_2DTensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.continuous_BP.SRLasso_3DTensor"><code class="docutils literal notranslate"><span class="pre">SRLasso_3DTensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.continuous_BP.cBP_1D"><code class="docutils literal notranslate"><span class="pre">cBP_1D()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso.helper">srlasso.helper module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.helper.generate_plots"><code class="docutils literal notranslate"><span class="pre">generate_plots()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.helper.prune"><code class="docutils literal notranslate"><span class="pre">prune()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso.lasso">srlasso.lasso module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.lasso.FISTA"><code class="docutils literal notranslate"><span class="pre">FISTA()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.lasso.Lasso_Tensor"><code class="docutils literal notranslate"><span class="pre">Lasso_Tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.lasso.groupLasso"><code class="docutils literal notranslate"><span class="pre">groupLasso()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso.mmd">srlasso.mmd module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.mmd.mmd"><code class="docutils literal notranslate"><span class="pre">mmd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.mmd.mmd_ED"><code class="docutils literal notranslate"><span class="pre">mmd_ED()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.mmd.mmd_laplace"><code class="docutils literal notranslate"><span class="pre">mmd_laplace()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso.operators">srlasso.operators module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getFourierMatrices"><code class="docutils literal notranslate"><span class="pre">getFourierMatrices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getFourierOp"><code class="docutils literal notranslate"><span class="pre">getFourierOp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getGaussianMatrices"><code class="docutils literal notranslate"><span class="pre">getGaussianMatrices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getGaussianOp"><code class="docutils literal notranslate"><span class="pre">getGaussianOp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getLaplaceMatrices"><code class="docutils literal notranslate"><span class="pre">getLaplaceMatrices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#srlasso.operators.getLaplaceOp"><code class="docutils literal notranslate"><span class="pre">getLaplaceOp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-srlasso">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SR-Lasso</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">srlasso package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/srlasso.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="srlasso-package">
+<h1>srlasso package<a class="headerlink" href="#srlasso-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-srlasso.continuous_BP">
+<span id="srlasso-continuous-bp-module"></span><h2>srlasso.continuous_BP module<a class="headerlink" href="#module-srlasso.continuous_BP" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.continuous_BP.SRLasso">
+<span class="sig-prename descclassname"><span class="pre">srlasso.continuous_BP.</span></span><span class="sig-name descname"><span class="pre">SRLasso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/continuous_BP.html#SRLasso"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.continuous_BP.SRLasso" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function solves SR Lasso,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min_{a,b}</span> <span class="pre">||</span> <span class="pre">A&#64;a</span> <span class="pre">+</span>&#160;&#160;&#160; <span class="pre">au*</span> <span class="pre">dA_S&#64;b</span> <span class="pre">-</span> <span class="pre">y_obs</span> <span class="pre">||^2</span> <span class="pre">+</span> <span class="pre">alpha</span> <span class="pre">*</span> <span class="pre">\sum_i</span> <span class="pre">\sqrt(|a_i|^2</span> <span class="pre">+|b_i|^2)</span></code></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – numpy.ndarray of size (m,n)
+the discretized forward operator, each column is phi(x_j) in R^m.</p></li>
+<li><p><strong>dA</strong> – numpy.ndarray of size (m,n)
+the discretized gradient of the forward operator, each column is phi’(x_j) in R^m.</p></li>
+<li><p><strong>tau</strong> – float between 0 and 1
+controls how far off the grid we can recover.</p></li>
+<li><p><strong>y_obs</strong> – numpy.ndarray f size (m,)
+measurements</p></li>
+<li><p><strong>alpha</strong> – float
+regularisation parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return shift<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray of size (n,)
+recovered positions</p>
+</dd>
+<dt class="field-odd">Return a<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray of size (n,)
+recovered amplitudes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.continuous_BP.SRLasso_2DTensor">
+<span class="sig-prename descclassname"><span class="pre">srlasso.continuous_BP.</span></span><span class="sig-name descname"><span class="pre">SRLasso_2DTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/continuous_BP.html#SRLasso_2DTensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.continuous_BP.SRLasso_2DTensor" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function solves SR Lasso,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min_{a,b}</span> <span class="pre">||</span> <span class="pre">F</span> <span class="pre">*</span> <span class="pre">a</span> <span class="pre">+</span>&#160; <span class="pre">au*</span> <span class="pre">dF_S</span> <span class="pre">*</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">y_obs</span> <span class="pre">||^2</span> <span class="pre">+</span> <span class="pre">alpha</span> <span class="pre">*</span> <span class="pre">\sum_i</span> <span class="pre">\sqrt(|a_i|^2</span> <span class="pre">+|b_i|^2)</span></code>
+where the forward operator F acts as a tensor Aotimes B.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – numpy.ndarrays of size (m1,n)
+the discretized forward operator, each column is phi(x_j) in R^m1.</p></li>
+<li><p><strong>B</strong> – numpy.ndarrays of size (m2,n)
+the discretized forward operator, each column is psi(x_k) in R^m2.
+The forward operator is then A otimes B, to model where we integrate against separable functions phi(x)*psi(y).</p></li>
+<li><p><strong>dA</strong> – numpy.ndarray of size (m1,n)
+the discretized gradient of the forward operator, each column is phi’(x_j) in R^m1.</p></li>
+<li><p><strong>dA</strong> – numpy.ndarray of size (m2,n)
+the discretized gradient of the forward operator, each column is psi’(x_j) in R^m2.</p></li>
+<li><p><strong>tau</strong> – float between 0 and 1
+controls how far off the grid we can recover</p></li>
+<li><p><strong>y_obs</strong> – numpy.ndarray f size (m,)
+measurements</p></li>
+<li><p><strong>alpha</strong> – float
+regularisation parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray of size (n,)
+shifts for recovered in each dimension</p>
+</dd>
+<dt class="field-odd">Return a<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray of size (n,)
+recovered amplitudes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.continuous_BP.SRLasso_3DTensor">
+<span class="sig-prename descclassname"><span class="pre">srlasso.continuous_BP.</span></span><span class="sig-name descname"><span class="pre">SRLasso_3DTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/continuous_BP.html#SRLasso_3DTensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.continuous_BP.SRLasso_3DTensor" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function solves SR Lasso,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min_{a,b}</span> <span class="pre">||</span> <span class="pre">F</span> <span class="pre">*</span> <span class="pre">a</span> <span class="pre">+</span>&#160; <span class="pre">au*</span> <span class="pre">dF_S</span> <span class="pre">*</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">y_obs</span> <span class="pre">||^2</span> <span class="pre">+</span> <span class="pre">alpha</span> <span class="pre">*</span> <span class="pre">\sum_i</span> <span class="pre">\sqrt(|a_i|^2</span> <span class="pre">+|b_i|^2)</span></code>
+where the forward operator F acts as a tensor X otimes Yotimes B</p>
+</dd>
+</dl>
+<section id="parameters">
+<h3>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>X<span class="classifier">numpy.ndarrays of size (m1,n)</span></dt><dd><p>the discretized forward operator, each column is phi(x_j) in R^m1.</p>
+</dd>
+<dt>Y<span class="classifier">numpy.ndarrays of size (m2,n)</span></dt><dd><p>the discretized forward operator, each column is psi(x_k) in R^m2.</p>
+</dd>
+<dt>B<span class="classifier">numpy.ndarrays of size (m3,n)</span></dt><dd><p>the discretized forward operator, each column is xi(x_k) in R^m2.
+The forward operator is then X otimes Yotimes B, to model where we integrate against separable functions phi(x)*psi(y)*xi(z).</p>
+</dd>
+<dt>dX,dY, dB<span class="classifier">numpy.ndarray of size (m1,n), (m2,n), (m3,n)</span></dt><dd><p>the discretized gradient of the forward operator, with columns  phi’(x_j),psi’(y_j),xi’(z_j) respectively.</p>
+</dd>
+<dt>tau<span class="classifier">float between 0 and 1</span></dt><dd><p>controls how far off the grid we can recover</p>
+</dd>
+<dt>y_obs<span class="classifier">numpy.ndarray f size (m,)</span></dt><dd><p>measurements</p>
+</dd>
+<dt>alpha: float</dt><dd><p>regularisation parameter.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>shift1, shift2, shift3<span class="classifier">numpy.ndarray of size (n,)</span></dt><dd><p>shifts for recovered in each dimension</p>
+</dd>
+<dt>a<span class="classifier">numpy.ndarray of size (n,)</span></dt><dd><p>recovered amplitudes</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.continuous_BP.cBP_1D">
+<span class="sig-prename descclassname"><span class="pre">srlasso.continuous_BP.</span></span><span class="sig-name descname"><span class="pre">cBP_1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/continuous_BP.html#cBP_1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.continuous_BP.cBP_1D" title="Link to this definition"></a></dt>
+<dd><p>This function solves the continuous basis pursuit problem</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>A<span class="classifier">numpy.ndarray of size (m,n)</span></dt><dd><p>the discretized forward operator, each column is phi(x_j) in R^m.</p>
+</dd>
+<dt>dA<span class="classifier">numpy.ndarray of size (m,n)</span></dt><dd><p>the discretized gradient of the forward operator, each column is phi’(x_j) in R^m.</p>
+</dd>
+<dt>h<span class="classifier">float.</span></dt><dd><p>grid size, we assume that x_{j+1} - x_j = h for all j.</p>
+</dd>
+<dt>y<span class="classifier">numpy.ndarray f size (m,)</span></dt><dd><p>measurements</p>
+</dd>
+<dt>alpha: float</dt><dd><p>regularisation parameter.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>shift<span class="classifier">numpy.ndarray of size (n,)</span></dt><dd><p>recovered positions</p>
+</dd>
+<dt>a<span class="classifier">numpy.ndarray of size (n,)</span></dt><dd><p>recovered amplitudes</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-srlasso.helper">
+<span id="srlasso-helper-module"></span><h2>srlasso.helper module<a class="headerlink" href="#module-srlasso.helper" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.helper.generate_plots">
+<span class="sig-prename descclassname"><span class="pre">srlasso.helper.</span></span><span class="sig-name descname"><span class="pre">generate_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xaxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/helper.html#generate_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.helper.generate_plots" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.helper.prune">
+<span class="sig-prename descclassname"><span class="pre">srlasso.helper.</span></span><span class="sig-name descname"><span class="pre">prune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/helper.html#prune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.helper.prune" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-srlasso.lasso">
+<span id="srlasso-lasso-module"></span><h2>srlasso.lasso module<a class="headerlink" href="#module-srlasso.lasso" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.lasso.FISTA">
+<span class="sig-prename descclassname"><span class="pre">srlasso.lasso.</span></span><span class="sig-name descname"><span class="pre">FISTA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proxF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xinit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/lasso.html#FISTA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.lasso.FISTA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.lasso.Lasso_Tensor">
+<span class="sig-prename descclassname"><span class="pre">srlasso.lasso.</span></span><span class="sig-name descname"><span class="pre">Lasso_Tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">la</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/lasso.html#Lasso_Tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.lasso.Lasso_Tensor" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function solves the group Lasso problem via VarPro, letting R be the group Lasso norm,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min_z</span> <span class="pre">||</span> <span class="pre">X(z)</span> <span class="pre">-</span> <span class="pre">y_obs</span> <span class="pre">||^2</span> <span class="pre">+</span> <span class="pre">lambda</span> <span class="pre">*</span> <span class="pre">R(z)</span></code>
+The minimization is over array of size (n1,…,nd,d) and <code class="docutils literal notranslate"><span class="pre">R(z)</span> <span class="pre">=</span> <span class="pre">sum_j</span> <span class="pre">||</span> <span class="pre">z_{(:,:,...,:,</span> <span class="pre">j)}</span> <span class="pre">||_F</span></code>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – the forward operator. This is a function handle mapping
+numpy.ndarray of size (n1,…,nd,d) to numpy.ndarray of size (m1,…,md)</p></li>
+<li><p><strong>Xt</strong> – is a function handle. This is the adjoint to X.</p></li>
+<li><p><strong>la</strong> – float, regularisation parameter</p></li>
+<li><p><strong>y</strong> – numpy.ndarray f size (m1,… md), measurements</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return z<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray of size (n1,…,nd,d)
+solution to group lasso</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.lasso.groupLasso">
+<span class="sig-prename descclassname"><span class="pre">srlasso.lasso.</span></span><span class="sig-name descname"><span class="pre">groupLasso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">la</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/lasso.html#groupLasso"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.lasso.groupLasso" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function solves the group Lasso problem via VarPro, letting R be the group Lasso norm,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min_z</span> <span class="pre">||</span> <span class="pre">X&#64;z</span> <span class="pre">-</span> <span class="pre">y_obs</span> <span class="pre">||^2</span> <span class="pre">+</span> <span class="pre">lambda</span> <span class="pre">*</span> <span class="pre">R(z)</span></code>
+The minimization is over array of size (n1,…,nd,d) and R(z) = sum_j || z_{(:,:,…,:, j)} ||_F.
+Given a vector z, the group norm is R(z) = np.sum( (np.abs(z)).reshape(q,-1), axis=0 )</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – numpy.ndarray of size (m,n*q)
+the forward operator.</p></li>
+<li><p><strong>la</strong> – float, regularisation parameter</p></li>
+<li><p><strong>y_obs</strong> – numpy.ndarray of size (m,)
+measurements</p></li>
+<li><p><strong>q</strong> – int,
+size of each group</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return z<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray of size (n*q,)
+solution to group lasso</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-srlasso.mmd">
+<span id="srlasso-mmd-module"></span><h2>srlasso.mmd module<a class="headerlink" href="#module-srlasso.mmd" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.mmd.mmd">
+<span class="sig-prename descclassname"><span class="pre">srlasso.mmd.</span></span><span class="sig-name descname"><span class="pre">mmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/mmd.html#mmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.mmd.mmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.mmd.mmd_ED">
+<span class="sig-prename descclassname"><span class="pre">srlasso.mmd.</span></span><span class="sig-name descname"><span class="pre">mmd_ED</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/mmd.html#mmd_ED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.mmd.mmd_ED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.mmd.mmd_laplace">
+<span class="sig-prename descclassname"><span class="pre">srlasso.mmd.</span></span><span class="sig-name descname"><span class="pre">mmd_laplace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/mmd.html#mmd_laplace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.mmd.mmd_laplace" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-srlasso.operators">
+<span id="srlasso-operators-module"></span><h2>srlasso.operators module<a class="headerlink" href="#module-srlasso.operators" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getFourierMatrices">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getFourierMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xgrid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getFourierMatrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getFourierMatrices" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function returns matrices to model the Fourier sampling operator,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">phi(x)</span> <span class="pre">=</span> <span class="pre">1/(2*K+1)</span> <span class="pre">(exp(2*pi*k*x))_{|k|\leq</span> <span class="pre">K}</span></code></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>K</strong> – int
+maximum observed frequency</p></li>
+<li><p><strong>xgrid</strong> – numpy.ndarray of size (n,)
+points to evaluate on, {x1,…, x_n}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return A<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray of size (2*K+1,n)
+Discretized operator on xgrid. A&#64;v = sum_{j=1}^n phi(x_j)</p>
+</dd>
+<dt class="field-odd">Return dA<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray of size (2*K+1,n)
+Discretized gradient operator on xgrid. dA&#64;v = sum_{j=1}^n phi’(x_j)</p>
+</dd>
+<dt class="field-even">Return Phi<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized operator taking float to numpy.ndarray of size (2*K+1,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getFourierOp">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getFourierOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getFourierOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getFourierOp" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function returns matrices to model the Fourier sampling operator,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">phi(x)</span> <span class="pre">=</span> <span class="pre">1/(2*K+1)</span> <span class="pre">(exp(2*pi*k*x))_{|k|\leq</span> <span class="pre">K}</span></code></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>K</strong> – int
+maximum observed frequency</p>
+</dd>
+<dt class="field-even">Return Phi<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized operator taking float to numpy.ndarray of size (2*K+1,)</p>
+</dd>
+<dt class="field-odd">Return dPhi<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gradient of Phi, taking float to numpy.ndarray of size (2*K+1,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getGaussianMatrices">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getGaussianMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xgrid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getGaussianMatrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getGaussianMatrices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getGaussianOp">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getGaussianOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getGaussianOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getGaussianOp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getLaplaceMatrices">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getLaplaceMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xgrid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getLaplaceMatrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getLaplaceMatrices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="srlasso.operators.getLaplaceOp">
+<span class="sig-prename descclassname"><span class="pre">srlasso.operators.</span></span><span class="sig-name descname"><span class="pre">getLaplaceOp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tvec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/srlasso/operators.html#getLaplaceOp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#srlasso.operators.getLaplaceOp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-srlasso">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-srlasso" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vignettes/certificate.html" class="btn btn-neutral float-left" title="Display of certificates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clarice Poon and Gabriel Peyré.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

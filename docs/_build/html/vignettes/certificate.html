@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Display of certificates &mdash; SR-Lasso 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="srlasso package" href="../srlasso.html" />
+    <link rel="prev" title="2D example" href="2D-comparison.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SR-Lasso
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1D-Fourier.html">1D Fourier example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2D-comparison.html">2D example</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Display of certificates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../srlasso.html">srlasso package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SR-Lasso</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Display of certificates</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/vignettes/certificate.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Display-of-certificates">
+<h1>Display of certificates<a class="headerlink" href="#Display-of-certificates" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">context</span> <span class="kn">import</span> <span class="n">continuous_BP</span> <span class="k">as</span> <span class="n">cbp</span>
+<span class="kn">from</span> <span class="nn">context</span> <span class="kn">import</span> <span class="n">mmd</span> <span class="k">as</span> <span class="n">mmd</span>
+<span class="kn">from</span> <span class="nn">context</span> <span class="kn">import</span> <span class="n">operators</span> <span class="k">as</span> <span class="n">myops</span>
+<span class="kn">from</span> <span class="nn">context</span> <span class="kn">import</span> <span class="n">lasso</span> <span class="k">as</span> <span class="n">ls</span>
+<span class="kn">from</span> <span class="nn">context</span> <span class="kn">import</span> <span class="n">helper</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import packages.</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span>  <span class="c1"># Python 3.4+</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">myops</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">mmd</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">cbp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[16], line 8</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">os</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">sys</span>
+<span class="ansi-green-fg">----&gt; 8</span> sys<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>insert(<span style="color: rgb(98,98,98)">0</span>, os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>abspath(os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>join(os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>dirname(<span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__file__</span>), <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">../srlasso/</span><span style="color: rgb(175,0,0)">&#39;</span>)))
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">context</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> continuous_BP <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> cbp
+<span class="ansi-green-intense-fg ansi-bold">     11</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">context</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> mmd <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> mmd
+
+<span class="ansi-red-fg">NameError</span>: name &#39;__file__&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[214]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#SR Lasso certificate</span>
+
+<span class="k">def</span> <span class="nf">SRLasso_certificate</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">shift</span><span class="p">,</span><span class="n">xgrid</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">scaleAfun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">scaleA</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dPhi</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">scaleA</span>
+
+    <span class="n">scaleA</span> <span class="o">=</span> <span class="n">scaleAfun</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">A0</span> <span class="o">=</span> <span class="n">Phi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">A1</span> <span class="o">=</span> <span class="n">tau</span><span class="o">*</span><span class="n">scaleA</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">dPhi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">X_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">A0</span><span class="p">,</span> <span class="n">A1</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">b0</span> <span class="o">=</span> <span class="o">-</span><span class="n">a0</span><span class="o">*</span><span class="n">shift</span><span class="o">/</span><span class="n">tau</span><span class="o">/</span><span class="n">scaleA</span>
+    <span class="n">magnitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sgn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">a0</span><span class="o">/</span><span class="n">magnitude</span><span class="p">,</span><span class="n">b0</span><span class="o">/</span><span class="n">magnitude</span><span class="p">))</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">X_I</span><span class="o">@</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">X_I</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="nd">@X_I</span><span class="p">)</span><span class="nd">@sgn</span> <span class="p">)</span>
+
+    <span class="n">eta</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Phi</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="nd">@coeffs</span>
+    <span class="n">eta_d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">scaleAfun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">dPhi</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="nd">@coeffs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eta</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tau</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eta_d</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1">#CBP certificates</span>
+<span class="k">def</span> <span class="nf">cBP_certificates</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">h</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span><span class="n">dPhi</span><span class="p">,</span><span class="n">xgrid</span><span class="p">):</span>
+
+    <span class="n">X_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Phi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span><span class="n">dPhi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sgn</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a0</span><span class="p">),),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a0</span><span class="p">),)))</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">X_I</span><span class="o">@</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">X_I</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="nd">@X_I</span><span class="p">)</span><span class="nd">@sgn</span><span class="p">)</span>
+    <span class="n">eta</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span> <span class="n">Phi</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span> <span class="nd">@coeffs</span> <span class="p">)</span>
+    <span class="n">eta_d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span> <span class="n">dPhi</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="nd">@coeffs</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">eta</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">h</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">eta_d</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">eta</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="n">h</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">eta_d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[215]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><br/><span></span><span class="k">def</span> <span class="nf">getOperator</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;Fourier&#39;</span><span class="p">:</span>
+        <span class="c1">#Fourier</span>
+        <span class="n">fq</span> <span class="o">=</span> <span class="mi">5</span>
+
+        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+        <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span> <span class="o">=</span> <span class="n">myops</span><span class="o">.</span><span class="n">getFourierOp</span><span class="p">(</span><span class="n">fq</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">op</span><span class="o">==</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">:</span>
+        <span class="c1">#Gaussian</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="n">tvec</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+        <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span> <span class="o">=</span> <span class="n">myops</span><span class="o">.</span><span class="n">getGaussianOp</span><span class="p">(</span><span class="n">tvec</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">op</span><span class="o">==</span><span class="s1">&#39;Laplace&#39;</span><span class="p">:</span>
+        <span class="c1">#Laplace</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span>
+        <span class="n">tvec</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span> <span class="o">=</span> <span class="n">myops</span><span class="o">.</span><span class="n">getLaplaceOp</span><span class="p">(</span><span class="n">tvec</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not defined!!&#39;</span><span class="p">)</span>
+    <span class="n">xgrid</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Phi</span><span class="p">,</span><span class="n">dPhi</span><span class="p">,</span><span class="n">xgrid</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[216]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;Gaussian&#39;</span>
+<span class="c1">#op = &#39;Fourier&#39;</span>
+<span class="c1">#op = &#39;Laplace&#39;</span>
+
+<span class="n">certmax_srl</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">certmax_cbp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">supp_srl</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">supp_cbp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Nvals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">50</span><span class="p">]</span>
+
+<span class="n">Nvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">Nvals</span><span class="p">:</span>
+<span class="c1">#N= 30 #grid size</span>
+    <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span><span class="p">,</span><span class="n">xgrid</span> <span class="o">=</span> <span class="n">getOperator</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">Phi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">dA</span> <span class="o">=</span> <span class="n">dPhi</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">scaleA</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dA</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">xgrid</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># true support</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="mf">0.4</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="mf">.7</span><span class="p">)])</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1">#how far into the grid the spikes are</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="c1">#calculate the ground truth b_0</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">SRLasso_certificate</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">spacing</span><span class="o">*</span><span class="n">h</span><span class="p">,</span><span class="n">xgrid</span><span class="p">[</span><span class="n">I</span><span class="p">],</span> <span class="n">tau</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">dPhi</span><span class="p">)</span>
+    <span class="n">fvec</span> <span class="o">=</span> <span class="n">f0</span><span class="p">(</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">fvec</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">certmax_srl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">fvec</span><span class="p">))</span>
+
+    <span class="c1">#plot certificate on grid</span>
+    <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span>
+        <span class="n">xgrid_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">,</span> <span class="n">f0</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">),</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span> <span class="n">f0</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;SRL_certificate.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.99</span><span class="p">,</span><span class="mf">1.01</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;SRL_certificate_zoom.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+
+    <span class="c1">#CPB certificate</span>
+    <span class="n">g1</span><span class="p">,</span><span class="n">g2</span>  <span class="o">=</span> <span class="n">cBP_certificates</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">h</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span><span class="n">dPhi</span><span class="p">,</span><span class="n">xgrid</span><span class="p">[</span><span class="n">I</span><span class="p">])</span>
+    <span class="n">gvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">g1</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span><span class="n">g2</span><span class="p">(</span><span class="n">xgrid</span><span class="p">))</span>
+    <span class="n">gvec</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">certmax_cbp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gvec</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span>
+        <span class="n">xgrid_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">,</span> <span class="n">g1</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">,</span> <span class="n">g2</span><span class="p">(</span><span class="n">xgrid_full</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span> <span class="n">g1</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\eta+\frac</span><span class="si">{h}{2}</span><span class="s1"> D\eta$&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span> <span class="n">g2</span><span class="p">(</span><span class="n">xgrid</span><span class="p">),</span> <span class="s1">&#39;bx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\eta-\frac</span><span class="si">{h}{2}</span><span class="s1"> D\eta$&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;16&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;cbp_certificate.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">1.08</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;cbp_certificate_zoom.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">xgrid</span><span class="p">[</span><span class="n">I</span><span class="p">]</span><span class="o">+</span><span class="n">spacing</span><span class="o">*</span><span class="n">h</span>
+
+    <span class="n">y_obs</span> <span class="o">=</span>  <span class="n">Phi</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span><span class="nd">@a0</span>
+
+    <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="c1">#cBP</span>
+    <span class="n">a_cbp</span><span class="p">,</span> <span class="n">shift_cbp</span><span class="o">=</span> <span class="n">cbp</span><span class="o">.</span><span class="n">cBP_1D</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span> <span class="p">)</span>
+    <span class="n">a_cbp</span><span class="p">,</span> <span class="n">x_cbp</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">a_cbp</span><span class="p">,</span><span class="n">shift_cbp</span> <span class="o">+</span> <span class="n">xgrid</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span>
+
+    <span class="c1">#SR Lasso</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">shift</span> <span class="o">=</span> <span class="n">cbp</span><span class="o">.</span><span class="n">SRLasso</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dA</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">a</span><span class="p">,</span>  <span class="n">xgrid</span><span class="o">+</span><span class="n">shift</span> <span class="p">,</span><span class="n">tol</span><span class="p">)</span>
+
+    <span class="n">supp_srl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    <span class="n">supp_cbp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a_cbp</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xgrid</span><span class="p">,</span> <span class="mi">0</span><span class="o">*</span><span class="n">xgrid</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">)</span>
+        <span class="n">markerline</span><span class="p">,</span> <span class="n">stemline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">a</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SR Lasso&#39;</span><span class="p">,</span>  <span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;c-&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">stemline</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.25</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+
+        <span class="n">markerline</span><span class="p">,</span> <span class="n">stemline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x_cbp</span><span class="p">,</span><span class="n">a_cbp</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;cBP&#39;</span><span class="p">,</span>  <span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;kd&#39;</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">stemline</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.25</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span><span class="n">a0</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Ground truth&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;rec&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[217]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Nvals</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Nvals</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">certmax_srl</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Nvals</span><span class="p">,</span><span class="n">certmax_cbp</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;cBP&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Nvals</span><span class="p">,</span><span class="n">certmax_srl</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;SR Lasso&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Nvals</span><span class="p">,</span><span class="n">Nvals</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/&#39;</span><span class="o">+</span><span class="n">op</span><span class="o">+</span><span class="s1">&#39;certificate_vals.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+20 20
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_certificate_6_1.png" src="../_images/vignettes_certificate_6_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[218]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Nvals</span><span class="p">,</span><span class="n">supp_cbp</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Nvals</span><span class="p">,</span><span class="n">supp_srl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[218]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x154019890&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/vignettes_certificate_7_1.png" src="../_images/vignettes_certificate_7_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="2D-comparison.html" class="btn btn-neutral float-left" title="2D example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../srlasso.html" class="btn btn-neutral float-right" title="srlasso package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clarice Poon and Gabriel Peyré.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
